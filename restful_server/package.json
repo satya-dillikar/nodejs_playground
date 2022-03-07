@@ -1,0 +1,16 @@
+{
+  "name": "restful_server",
+  "version": "1.0.0",
+  "description": "RESTful Web Services",
+  "main": "index.js",
+  "author": "Satya D",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js",
+    "test": "jest --verbose"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "keywords": []
+}
