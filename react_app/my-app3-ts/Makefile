@@ -1,5 +1,5 @@
 
-NAME:=http_json_rest
+NAME:=reactapp_grpc
 DOCKER_REPOSITORY:=dsatya6
 DOCKER_IMAGE_NAME:=$(DOCKER_REPOSITORY)/$(NAME)
 VERSION:=0.1.0
@@ -7,22 +7,33 @@ VERSION:=0.1.0
 .PHONY: build clean test build-container push-container test-container
 
 build :
-	go build -o bin/server_main ./server/server_main.go
-	go build -o bin/client_main ./client/client_main.go
+	yarn install
+	yarn add typescript @types/node @types/react @types/react-dom @types/jest
+	yarn add ts-proto
+	yarn add grpc
+	yarn add protoc-gen-grpc-web
+	yarn add google-protobuf @types/google-protobuf @improbable-eng/grpc-web
+	yarn add swagger-ui-react	
+	yarn build
+	
 clean :
-	@rm bin/*
+	@rm yarn.lock
+	@rm yarn-error.log
+	@rm -rf node_modules
+	@rm -rf build
+	@rm package-lock.json
 
 test:
-	go test -v ./...  
+	yarn run start
 
 build-container :
-	@docker build -t dsatya6/http_json_rest:$(VERSION) .
+	@docker build -t dsatya6/$(NAME):$(VERSION) .
 
 push-container :
-	@docker push dsatya6/http_json_rest:$(VERSION)	
+	@docker push dsatya6/$(NAME):$(VERSION)	
 
 test-container :
-	@docker rm -f http_json_rest || true
-	@docker run -dp 9001:9001 --name=http_json_rest $(DOCKER_IMAGE_NAME):$(VERSION)
+	@docker rm -f $(NAME) || true
+	@docker run -dp 9001:9001 --name=$(NAME) $(DOCKER_IMAGE_NAME):$(VERSION)
 	@docker ps
-	curl -s localhost:9001 | grep Me	
+	curl -s localhost:3000

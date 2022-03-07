@@ -18,7 +18,9 @@ export interface HelloReply {
   message: string;
 }
 
-const baseHelloRequest: object = { name: "" };
+function createBaseHelloRequest(): HelloRequest {
+  return { name: "" };
+}
 
 export const HelloRequest = {
   encode(
@@ -34,7 +36,7 @@ export const HelloRequest = {
   decode(input: _m0.Reader | Uint8Array, length?: number): HelloRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseHelloRequest } as HelloRequest;
+    const message = createBaseHelloRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -50,13 +52,9 @@ export const HelloRequest = {
   },
 
   fromJSON(object: any): HelloRequest {
-    const message = { ...baseHelloRequest } as HelloRequest;
-    if (object.name !== undefined && object.name !== null) {
-      message.name = String(object.name);
-    } else {
-      message.name = "";
-    }
-    return message;
+    return {
+      name: isSet(object.name) ? String(object.name) : "",
+    };
   },
 
   toJSON(message: HelloRequest): unknown {
@@ -65,18 +63,18 @@ export const HelloRequest = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<HelloRequest>): HelloRequest {
-    const message = { ...baseHelloRequest } as HelloRequest;
-    if (object.name !== undefined && object.name !== null) {
-      message.name = object.name;
-    } else {
-      message.name = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<HelloRequest>, I>>(
+    object: I
+  ): HelloRequest {
+    const message = createBaseHelloRequest();
+    message.name = object.name ?? "";
     return message;
   },
 };
 
-const baseHelloReply: object = { message: "" };
+function createBaseHelloReply(): HelloReply {
+  return { message: "" };
+}
 
 export const HelloReply = {
   encode(
@@ -92,7 +90,7 @@ export const HelloReply = {
   decode(input: _m0.Reader | Uint8Array, length?: number): HelloReply {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseHelloReply } as HelloReply;
+    const message = createBaseHelloReply();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -108,13 +106,9 @@ export const HelloReply = {
   },
 
   fromJSON(object: any): HelloReply {
-    const message = { ...baseHelloReply } as HelloReply;
-    if (object.message !== undefined && object.message !== null) {
-      message.message = String(object.message);
-    } else {
-      message.message = "";
-    }
-    return message;
+    return {
+      message: isSet(object.message) ? String(object.message) : "",
+    };
   },
 
   toJSON(message: HelloReply): unknown {
@@ -123,13 +117,11 @@ export const HelloReply = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<HelloReply>): HelloReply {
-    const message = { ...baseHelloReply } as HelloReply;
-    if (object.message !== undefined && object.message !== null) {
-      message.message = object.message;
-    } else {
-      message.message = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<HelloReply>, I>>(
+    object: I
+  ): HelloReply {
+    const message = createBaseHelloReply();
+    message.message = object.message ?? "";
     return message;
   },
 };
@@ -309,6 +301,7 @@ type Builtin =
   | number
   | boolean
   | undefined;
+
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -319,7 +312,19 @@ export type DeepPartial<T> = T extends Builtin
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
+
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
 }
