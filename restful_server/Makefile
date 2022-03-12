@@ -1,5 +1,5 @@
 
-NAME:=js-server
+NAME:=js-rest-server
 DOCKER_REPOSITORY:=dsatya6
 DOCKER_IMAGE_NAME:=$(DOCKER_REPOSITORY)/$(NAME)
 VERSION:=0.1.0
@@ -60,5 +60,6 @@ test-container :
 	@sleep 2
 	@curl http://localhost:3050/
 	@echo ""
+	@sleep 2
 	@docker stop $(NAME) || true
 	@docker rm -f $(NAME) || true

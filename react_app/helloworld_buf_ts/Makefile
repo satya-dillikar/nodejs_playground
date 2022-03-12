@@ -1,4 +1,4 @@
-NAME:=grpc_backend
+NAME:=grpc-backend
 DOCKER_REPOSITORY:=dsatya6
 DOCKER_IMAGE_NAME:=$(DOCKER_REPOSITORY)/$(NAME)
 VERSION:=0.1.0
@@ -25,6 +25,8 @@ run :
 	sleep 2
 	curl -X POST -k http://192.168.1.211:3090/v1/example/echo -d '{"name" : "satya"}'
 	@echo  ""
+
+
 run2 :
 	unset PORT && \
 	unset HOST && \
@@ -54,7 +56,7 @@ push-container :
 
 test-container :
 	@docker rm -f $(NAME) || true
-	@docker run -d --env PORT=3050 --env HOST="192.168.1.211" -p 3050:3050 --name=$(NAME) $(DOCKER_IMAGE_NAME):$(VERSION)
+	@docker run -d --env PORT=3050 -p 3050:3050 --name=$(NAME) $(DOCKER_IMAGE_NAME):$(VERSION)
 	@docker ps
 	@sleep 5
 	@echo  ""
@@ -96,5 +98,6 @@ test-container2 :
 	@echo  ""
 	@grpcurl -plaintext -d '{ "name" : "sunny"}' 0.0.0.0:8090 Greeter.SayHelloAgain
 	@echo  ""
+	@sleep 2
 	@docker stop $(NAME) || true
-	@docker rm -f $(NAME) || true	
+	@docker rm -f $(NAME) || true

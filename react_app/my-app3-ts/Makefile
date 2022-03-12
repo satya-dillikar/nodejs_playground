@@ -1,5 +1,5 @@
 
-NAME:=grpc_frontend
+NAME:=grpc-frontend
 DOCKER_REPOSITORY:=dsatya6
 DOCKER_IMAGE_NAME:=$(DOCKER_REPOSITORY)/$(NAME)
 VERSION:=0.1.0
@@ -46,3 +46,7 @@ test-container :
 	@docker ps
 	@sleep 5
 	@curl -s localhost:3000
+	@echo ""
+	@sleep 2
+	@docker stop $(NAME) || true
+	@docker rm -f $(NAME) || true	
