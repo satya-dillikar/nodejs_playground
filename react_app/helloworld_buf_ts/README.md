@@ -33,6 +33,8 @@ Any advise for common problems or issues.
 command to run if program contains helper info
 ```
 
+docker run curlimages/curl -s -X POST -k http://192.168.1.211:8090/v1/example/echo -d '{"name" : "satya"}'
+docker run fullstorydev/grpcurl -plaintext 192.168.1.211:8090 list
 ## Authors
 
 Contributors names and contact info

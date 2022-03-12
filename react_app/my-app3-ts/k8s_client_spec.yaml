@@ -1,0 +1,34 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sample-traffic
+  labels:
+    name: sample-traffic
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: grpc-frontend-pod
+  namespace: sample-traffic
+  labels:
+    app: grpc
+spec:
+  containers:
+    - name: grpc-frontend-container
+      image: dsatya6/grpc_frontend:0.1.0
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: grpc-frontend-service
+  namespace: sample-traffic
+spec:
+  type: NodePort
+  selector:
+    app: grpc
+  ports:
+    # port - port exposed internally in the cluster
+    # targetPort - the container port to send requests to
+    - port: 3000
+      targetPort: 3000

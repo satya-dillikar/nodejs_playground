@@ -8,13 +8,16 @@ LABEL maintainer = ["satya@gmail.com"]
 
 WORKDIR /app
 
+# server info
+ENV PORT=3000
+
 COPY ["package.json", "package-lock.json", "./"]
 
 RUN npm install --production
 
-COPY . /app
+COPY ["index.js", "users.json", "./"]
 
-#app is running on 8080
-EXPOSE 8080
+#app is running on 3080
+EXPOSE 3080
 
 CMD [ "node", "index.js" ]

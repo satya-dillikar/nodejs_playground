@@ -4,6 +4,7 @@ import List from './components/List';
 import { grpc } from "@improbable-eng/grpc-web";
 import { GreeterClientImpl, GrpcWebImpl } from "./components/gen/helloworld/helloworld";
 import { useState, useEffect } from 'react';
+// require('dotenv').config();
 
 /* const avengers = [
   'Captain America',
@@ -26,7 +27,11 @@ const avengers = [
 function App() {
 
   let transport = grpc.CrossBrowserHttpTransport({});
-   let grp_client = new GrpcWebImpl("http://127.0.0.1:50051", {
+  let api_server_port = process.env.REACT_APP_API_SERVER_PORT || 8090;
+  let api_server_host = process.env.REACT_APP_API_SERVER_HOST || "127.0.0.1";
+  let api_server_url = "http://"+api_server_host+":"+api_server_port
+  console.log("API server is", api_server_url)
+  let grp_client = new GrpcWebImpl(api_server_url, {
        transport })
 
   let greeterClient = new GreeterClientImpl(grp_client);

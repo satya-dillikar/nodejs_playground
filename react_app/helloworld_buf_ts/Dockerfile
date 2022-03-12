@@ -13,15 +13,22 @@ COPY . .
 
 ENV GO111MODULE=on
 
+# server info
+ENV PORT=8090
+# ENV HOST=127.0.0.1
+
 RUN go mod download
 
 RUN CGO_ENABLED=0 go build -o bin/greeter_server ./greeter_server/main.go
-RUN CGO_ENABLED=0 go build -o bin/greeter_client ./greeter_client/main.go
+# RUN CGO_ENABLED=0 go build -o bin/greeter_client ./greeter_client/main.go
 
 FROM alpine:${ALPINE_VERSION}
 
 WORKDIR /home/app
 
 COPY --from=builder /go_app/bin/greeter_server .
+
+#app is running on 8090
+EXPOSE 8090
 
 CMD ["./greeter_server"]

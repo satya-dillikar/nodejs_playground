@@ -108,3 +108,5 @@ N/A
 * [adding-typescript](https://create-react-app.dev/docs/adding-typescript)
 * [getting-started-with-react-and-typescript](https://www.thisdot.co/blog/getting-started-with-react-and-typescript)
 * [your-first-react-typescript-project-todo-app](https://typeofnan.dev/your-first-react-typescript-project-todo-app/)
+
+https://mherman.org/blog/dockerizing-a-react-app/

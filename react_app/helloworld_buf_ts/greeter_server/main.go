@@ -21,9 +21,11 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net"
 	"net/http"
+	"os"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
@@ -134,13 +136,13 @@ func main() {
 	log.Fatalln(gwServer.ListenAndServe())
 
 }
-*/
+
 
 const (
-	//	port = ":8090"
-	port = ":50051"
+	port = ":8090"
+	// port = ":50051"
 )
-
+*/
 type gwHandlerArgs struct {
 	ctx         context.Context
 	mux         *runtime.ServeMux
@@ -150,7 +152,27 @@ type gwHandlerArgs struct {
 
 func main() {
 
-	lis, err := net.Listen("tcp", port)
+	var port string
+	var host string
+	var server_url string
+
+	port_val, present := os.LookupEnv("PORT")
+	if present {
+		port = port_val
+	} else {
+		port = "8090"
+	}
+	host_val, present := os.LookupEnv("HOST")
+	if present {
+		host = host_val
+	} else {
+		host = ""
+	}
+	server_url = host + ":" + port
+
+	fmt.Println("server is at PORT:", server_url)
+
+	lis, err := net.Listen("tcp", server_url)
 	if err != nil {
 		//return fmt.Errorf("failed to listen: %v", err)
 		log.Fatalf("failed to listen: %v", err)
@@ -181,7 +203,7 @@ func main() {
 		grpcweb.WithWebsocketOriginFunc(func(req *http.Request) bool { return true }),
 	)
 
-	listenAddr := port
+	listenAddr := server_url
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -257,7 +279,7 @@ func main() {
 			log.Fatalf("failed to serve: %v", err)
 		}
 	}()
-	log.Printf("Serving HTTP %v", port)
+	log.Printf("Serving HTTP %v", server_url)
 
 	log.Println("Starting MUX server on")
 	if err := mux.Serve(); err != nil {

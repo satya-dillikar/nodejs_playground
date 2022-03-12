@@ -1,6 +1,8 @@
 var express = require('express');
 var app = express();
-const port = 8080;
+const port = process.env.PORT || 3080;
+// const host = process.env.HOST || "localhost";
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -31,7 +33,7 @@ var events = [
 		ID:          "3",
 		Title:       "Introduction to Javascript",
 		Description: "Come join us try it out",
-	},      
+	},
 ]
 
 // router.HandleFunc("/", homeLink)
@@ -84,7 +86,7 @@ app.patch('/events/:id', function (req, res) {
          console.log(events[i])
          data =JSON.stringify(events[i])
 			events[i].Title = updatedEvent.Title
-			events[i].Description = updatedEvent.Description         
+			events[i].Description = updatedEvent.Description
          console.log("The event with ID %d has been updated successfully", eventID)
          break
       }
@@ -97,26 +99,27 @@ app.delete('/events/:id', function (req, res) {
    let eventID=req.params.id
    data =""
    console.log("received eventId %d", eventID)
-   a_len = events.length   
+   a_len = events.length
    for (i=0; i <a_len; i++) {
       if (events[i].ID == eventID) {
          console.log(events[i])
-         data =JSON.stringify(events[i])     
+         data =JSON.stringify(events[i])
          events.splice(i,1)
          console.log("The event with ID %d has been deleted successfully", eventID)
          break
       }
-   }   
+   }
    res.end(data);
 })
 
 app.get('/listUsers', function (req, res) {
    fs.readFile( __dirname + "/" + "users.json", 'utf8', function (err, data) {
-      console.log( data );
+      // console.log( data );
       res.end( data );
    });
 })
 
+// var server = app.listen(port, host, function (err) {
 var server = app.listen(port, function (err) {
    if (err) console.log(err);
    var host = server.address().address
